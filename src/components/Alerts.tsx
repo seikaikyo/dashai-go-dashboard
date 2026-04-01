@@ -35,8 +35,14 @@ export default function Alerts() {
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const json = await res.json()
       const list = json.data ?? json
-      setAlerts(Array.isArray(list) ? list.map((a: Record<string, unknown>) => ({
-        ...a,
+      setAlerts(Array.isArray(list) ? list.map((a: Alert & { ack?: boolean }) => ({
+        id: a.id,
+        severity: a.severity,
+        type: a.type,
+        message: a.message,
+        node_id: a.node_id,
+        device_ip: a.device_ip,
+        technique: a.technique,
         acknowledged: a.ack ?? a.acknowledged ?? false,
       })) : [])
       setError(null)
